@@ -2,12 +2,14 @@ import express from "express";
 import axios from "axios";
 import path from "path";
 import { JSDOM } from "jsdom";
+import { fileURLToPath } from "url";
+import cors from "cors";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 const port = 3000;
 app.use(express.json());
-
-
+app.use(cors());
 // 🔹 Rota para buscar o título da Amazon
 async function getData() {
     try {
@@ -24,7 +26,7 @@ async function getData() {
         const dom = new JSDOM(response.data);
         const title = dom.window.document.title;
 
-        return title || "Title not found"; // Se title for vazio, retorna fallback
+        return title || "Title not found";
     } catch (error) {
         console.error("Error fetching data:", error.message);
         return "Error loading title";
@@ -46,7 +48,7 @@ app.post("/api/process", (req, res) => {
 
     res.json({ message: "Texto processado com sucesso!", result: processedText });
 });
- 
+
 // 🔹 Rota API para o frontend consumir
 app.get("/api/title", async (req, res) => {
     try {
@@ -61,7 +63,7 @@ app.get("/api/title", async (req, res) => {
 app.use(express.static("frontend"));
 
 app.get("*", (req, res) => {
-    res.sendFile(path.join(import.meta.dir, "frontend/index.html"));
+    res.sendFile(path.join(__dirname, "frontend", "index.html"));
 });
 
 // 🔹 Iniciar servidor

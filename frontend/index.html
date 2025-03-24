@@ -4,40 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Processador de Texto</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-        input, button { padding: 10px; margin: 5px; }
-    </style>
+    <link rel="stylesheet" href="/src/style.css">  <!-- Importando o CSS -->
 </head>
 <body>
-    <h1>Processador de Texto</h1>
-    <input type="text" id="textInput" placeholder="Digite algo...">
-    <button onclick="sendData()">Enviar</button>
-    <p id="responseText"></p>
-
-    <script>
-        async function sendData() {
-            const inputText = document.getElementById("textInput").value;
-            const responseText = document.getElementById("responseText");
-
-            if (!inputText) {
-                responseText.innerText = "Por favor, digite algo!";
-                return;
-            }
-
-            try {
-                const response = await fetch("/api/process", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ text: inputText })
-                });
-
-                const data = await response.json();
-                responseText.innerText = data.result || "Erro ao processar!";
-            } catch (error) {
-                responseText.innerText = "Erro ao conectar com o backend!";
-            }
-        }
-    </script>
+    <div id="app"></div> <!-- Aqui o conteúdo será injetado -->
+    <script type="module" src="/src/main.js"></script>
 </body>
 </html>
